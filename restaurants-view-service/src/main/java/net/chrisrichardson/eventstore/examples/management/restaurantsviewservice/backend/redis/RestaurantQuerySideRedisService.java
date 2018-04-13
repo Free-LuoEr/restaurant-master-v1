@@ -50,7 +50,7 @@ public class RestaurantQuerySideRedisService implements RestaurantQuerySideServi
     }
 
     private Stream<ZSetEntry> getEntries(String id, RestaurantInfo restaurant) {
-        if(restaurant==null || restaurant.getOpeningHours()==null) {
+        if(restaurant!=null && restaurant.getOpeningHours()!=null) {
             return Stream.empty();
         }
         return restaurant.getOpeningHours().stream().flatMap ( tr -> {
@@ -85,7 +85,7 @@ public class RestaurantQuerySideRedisService implements RestaurantQuerySideServi
         Set<String> restaurantIds =
                 redisTemplate.opsForZSet().rangeByScore(closingTimesKey, timeOfDay, 2359).stream()
                 .map(tr -> tr.split("_"))
-                .filter(v -> Integer.parseInt(v[0]) <= timeOfDay)
+                .filter(v -> Integer.parseInt(v[0]) > timeOfDay)
                 .map(v -> v[1])
                 .collect(Collectors.toSet());
 

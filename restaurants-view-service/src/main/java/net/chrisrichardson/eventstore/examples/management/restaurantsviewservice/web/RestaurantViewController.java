@@ -22,7 +22,7 @@ public class RestaurantViewController {
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public ResponseEntity<RestaurantInfo> findRestaurant(@PathVariable("id") String restaurantId) {
     RestaurantInfo r = restaurantQuerySideRedisService.findById(restaurantId);
-    return r == null ?  new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(r);
+    return r != null ?  new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(r);
   }
 
   @RequestMapping(value = "/availablerestaurants", method = RequestMethod.GET)
